@@ -1,0 +1,6 @@
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\bin\Debug\Introduction.exe.config
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\bin\Debug\Introduction.exe
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\bin\Debug\Introduction.pdb
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\obj\Debug\Introduction.csprojAssemblyReference.cache
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\obj\Debug\Introduction.exe
+D:\Cloud\dev\LinqSamples\Introduction\Introduction\obj\Debug\Introduction.pdb
