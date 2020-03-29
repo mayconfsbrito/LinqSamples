@@ -57,6 +57,31 @@ namespace Cars
             {
                 Console.WriteLine($"{car.Headquarters} {car.Name} : {car.Combined}");
             }
+
+            Groupping(cars, manufacturers);
+        }
+
+        private static void Groupping(IEnumerable<Car> cars, IEnumerable<Manufacturer> manufacturers)
+        {
+            //var query =
+            //    from car in cars
+            //    group car by car.Manufacturer.ToUpper() into manufacturer
+            //    orderby manufacturer.Key
+            //    select manufacturer;
+
+            var query2 =
+                cars.GroupBy(c => c.Manufacturer.ToUpper())
+                .OrderBy(g => g.Key);
+
+            Console.WriteLine("Grouping");
+            foreach (var group in query2)
+            {
+                Console.WriteLine($"{group.Key}:");
+                foreach (var car in group.OrderByDescending(c => c.Combined).Take(2))
+                {
+                    Console.WriteLine($"\t{car.Name} : {car.Combined}");
+                }
+            }
         }
 
         private static List<Manufacturer> ProcessManufacturers(string path)
