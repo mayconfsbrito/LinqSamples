@@ -94,6 +94,64 @@ namespace Cars
                     Console.WriteLine($"\t{car.Name} : {car.Combined}");
                 }
             }
+
+            Aggregate(cars);
+        }
+
+        private static void Aggregate(IEnumerable<Car> cars)
+        {
+            var result =
+                from car in cars
+                group car by car.Manufacturer into carGroup
+                select new
+                {
+                    Name = carGroup.Key,
+                    Max = carGroup.Max(c => c.Combined),
+                    Min = carGroup.Min(c => c.Combined),
+                    Avg = carGroup.Average(c => c.Combined)
+                };
+
+            Console.WriteLine("\nAggregate:");
+            foreach (var car in result)
+            {
+                Console.WriteLine($"{car.Name}");
+                Console.WriteLine($"\tMax: {car.Max}");
+                Console.WriteLine($"\tMin: {car.Min}");
+                Console.WriteLine($"\tAvg: {car.Avg}");
+            }
+        }
+
+        private static void AggregateAccumulate(IEnumerable<Car> cars)
+        {
+            var result =
+                cars
+                    .GroupBy(c => c.Manufacturer)
+                    .Select(g =>
+                    {
+                        var results = g.Aggregate(
+                            new CarStatistics(),
+                            (acc, c) => acc.Accumulate(c),
+                            acc => acc.Compute());
+
+                        return new
+                        {
+                            Name = g.Key,
+                            Avg = results.Average,
+                            Min = results.Min,
+                            Max = results.Max
+                        };
+                    })
+                    .OrderByDescending(r => r.Max);
+
+
+            Console.WriteLine("\nAggregate Accumulate:");
+            foreach (var car in result)
+            {
+                Console.WriteLine($"{car.Name}");
+                Console.WriteLine($"\tMax: {car.Max}");
+                Console.WriteLine($"\tMin: {car.Min}");
+                Console.WriteLine($"\tAvg: {car.Avg}");
+            }
         }
 
         private static List<Manufacturer> ProcessManufacturers(string path)
