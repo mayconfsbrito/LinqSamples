@@ -63,21 +63,33 @@ namespace Cars
 
         private static void Groupping(IEnumerable<Car> cars, IEnumerable<Manufacturer> manufacturers)
         {
-            //var query =
-            //    from car in cars
-            //    group car by car.Manufacturer.ToUpper() into manufacturer
-            //    orderby manufacturer.Key
-            //    select manufacturer;
+            var query =
+                from manufacturer in manufacturers
+                join car in cars on manufacturer.Name equals car.Manufacturer
+                    into carGroup
+                orderby manufacturer.Headquarters
+                select new
+                {
+                    Manufacturer = manufacturer,
+                    Cars = carGroup
+                } into result
+                group result by result.Manufacturer.Headquarters;
 
             var query2 =
-                cars.GroupBy(c => c.Manufacturer.ToUpper())
-                .OrderBy(g => g.Key);
+                manufacturers.GroupJoin(cars, m => m.Name, c => c.Manufacturer, (m, g) =>
+                    new
+                    {
+                        Manufacturer = m,
+                        Cars = g
+                    }
+                ).OrderBy(m => m.Manufacturer.Headquarters)
+                .GroupBy(m => m.Manufacturer.Headquarters);
 
-            Console.WriteLine("Grouping");
-            foreach (var group in query2)
+            Console.WriteLine("\nGrouping");
+            foreach (var group in query)
             {
-                Console.WriteLine($"{group.Key}:");
-                foreach (var car in group.OrderByDescending(c => c.Combined).Take(2))
+                Console.WriteLine($"{group.Key}");
+                foreach (var car in group.SelectMany(g => g.Cars).OrderByDescending(c => c.Combined).Take(3))
                 {
                     Console.WriteLine($"\t{car.Name} : {car.Combined}");
                 }
