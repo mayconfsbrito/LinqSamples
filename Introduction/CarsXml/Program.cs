@@ -37,7 +37,7 @@ namespace CarsXml
 
         private static void CreateXml()
         {
-            var records = ProcessFile("fuel.csv");
+            var records = ProcessCars("fuel.csv");
 
             var ns = (XNamespace)"http://pluralsight.com/cars/2016";
             var ex = (XNamespace)"http://pluralsight.com/cars/2016/ex";
@@ -59,7 +59,7 @@ namespace CarsXml
             document.Save("fuel.xml");
         }
 
-        private static IEnumerable<Car> ProcessFile(string path)
+        private static IEnumerable<Car> ProcessCars(string path)
         {
             return File.ReadAllLines(path)
                 .Skip(1)
